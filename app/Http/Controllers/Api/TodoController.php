@@ -39,7 +39,8 @@ class TodoController extends Controller
         $allowedSorts = ['created_at', 'due_date', 'priority', 'title'];
         if (in_array($sortBy, $allowedSorts)) {
             if ($sortBy === 'priority') {
-                $query->orderByRaw("FIELD(priority, 'high', 'medium', 'low') " . ($sortOrder === 'asc' ? 'DESC' : 'ASC'));
+                $direction = $sortOrder === 'asc' ? 'ASC' : 'DESC';
+                $query->orderByRaw("CASE priority WHEN 'high' THEN 1 WHEN 'medium' THEN 2 WHEN 'low' THEN 3 END " . $direction);
             } else {
                 $query->orderBy($sortBy, $sortOrder);
             }

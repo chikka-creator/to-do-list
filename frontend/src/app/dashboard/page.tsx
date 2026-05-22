@@ -55,8 +55,8 @@ export default function DashboardPage() {
         api.get('/todos', { params }),
         api.get('/todos/stats'),
       ]);
-      setTodos(todosRes.data.data);
-      setStats(statsRes.data);
+      setTodos(Array.isArray(todosRes.data?.data) ? todosRes.data.data : []);
+      setStats(statsRes.data || { total: 0, completed: 0, pending: 0, overdue: 0 });
     } catch {
       // handled by interceptor
     } finally {

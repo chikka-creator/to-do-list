@@ -19,6 +19,7 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 
 // Fix for Vercel Serverless read-only filesystem
 if (isset($_SERVER['VERCEL']) || isset($_ENV['VERCEL'])) {
+    ini_set('display_errors', '0'); // Prevent warnings from corrupting JSON
     $storagePath = '/tmp/storage';
     $app->useStoragePath($storagePath);
     
@@ -34,7 +35,7 @@ if (isset($_SERVER['VERCEL']) || isset($_ENV['VERCEL'])) {
     
     foreach ($directories as $directory) {
         if (!is_dir($directory)) {
-            mkdir($directory, 0777, true);
+            @mkdir($directory, 0777, true);
         }
     }
 }

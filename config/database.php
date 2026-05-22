@@ -17,7 +17,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => env('DB_CONNECTION', isset($_SERVER['VERCEL']) || isset($_ENV['VERCEL']) ? 'pgsql' : 'sqlite'),
 
     /*
     |--------------------------------------------------------------------------

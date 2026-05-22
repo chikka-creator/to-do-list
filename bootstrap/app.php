@@ -21,4 +21,16 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json(['message' => 'Unauthenticated.'], 401);
             }
         });
+
+        // Always return JSON errors on Vercel for API debugging
+        $exceptions->render(function (\Throwable $e, Request $request) {
+            if (isset($_SERVER['VERCEL']) || isset($_ENV['VERCEL'])) {
+                return response()->json([
+                    'message' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => $e->getTraceAsString(),
+                ], 500);
+            }
+        });
     })->create();

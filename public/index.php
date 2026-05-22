@@ -18,26 +18,11 @@ require __DIR__.'/../vendor/autoload.php';
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
 // Fix for Vercel Serverless read-only filesystem
-if (isset($_SERVER['VERCEL']) || isset($_ENV['VERCEL']) || getenv('VERCEL')) {
-    ini_set('display_errors', '0'); // Prevent warnings from corrupting JSON
-    $storagePath = '/tmp/storage';
-    $app->useStoragePath($storagePath);
-    
-    // Ensure all required storage directories exist
-    $directories = [
-        $storagePath . '/app',
-        $storagePath . '/framework/cache/data',
-        $storagePath . '/framework/sessions',
-        $storagePath . '/framework/testing',
-        $storagePath . '/framework/views',
-        $storagePath . '/logs',
-    ];
-    
-    foreach ($directories as $directory) {
-        if (!is_dir($directory)) {
-            @mkdir($directory, 0777, true);
-        }
-    }
+// Storage dirs are already created in api/index.php, but we still need to redirect the storage path
+$isVercel = isset($_SERVER['VERCEL']) || isset($_ENV['VERCEL']) || getenv('VERCEL');
+if ($isVercel) {
+    @ini_set('display_errors', '0');
+    $app->useStoragePath('/tmp/storage');
 }
 
 $app->handleRequest(Request::capture());

@@ -24,7 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Always return JSON errors on Vercel for API debugging
         $exceptions->render(function (\Throwable $e, Request $request) {
-            if (isset($_SERVER['VERCEL']) || isset($_ENV['VERCEL'])) {
+            if (isset($_SERVER['VERCEL']) || isset($_ENV['VERCEL']) || getenv('VERCEL')) {
                 return response()->json([
                     'message' => 'VERCEL API ERROR: ' . $e->getMessage(),
                     'file' => $e->getFile(),

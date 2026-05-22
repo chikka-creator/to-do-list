@@ -18,7 +18,7 @@ require __DIR__.'/../vendor/autoload.php';
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
 // Fix for Vercel Serverless read-only filesystem
-if (isset($_SERVER['VERCEL']) || isset($_ENV['VERCEL'])) {
+if (isset($_SERVER['VERCEL']) || isset($_ENV['VERCEL']) || getenv('VERCEL')) {
     ini_set('display_errors', '0'); // Prevent warnings from corrupting JSON
     $storagePath = '/tmp/storage';
     $app->useStoragePath($storagePath);

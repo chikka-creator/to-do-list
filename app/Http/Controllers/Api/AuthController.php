@@ -12,7 +12,7 @@ use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
-    public function register(Request $request): JsonResponse
+    public function register(Request $request)
     {
         $validated = $request->validate([
             'name'     => ['required', 'string', 'max:255'],
@@ -39,7 +39,7 @@ class AuthController extends Controller
         ], 201);
     }
 
-    public function login(Request $request): JsonResponse
+    public function login(Request $request)
     {
         $validated = $request->validate([
             'email'    => ['required', 'email'],
@@ -66,14 +66,14 @@ class AuthController extends Controller
         ]);
     }
 
-    public function logout(Request $request): JsonResponse
+    public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
 
         return response()->json(['message' => 'Logged out successfully']);
     }
 
-    public function me(Request $request): JsonResponse
+    public function me(Request $request)
     {
         return response()->json([
             'user' => [

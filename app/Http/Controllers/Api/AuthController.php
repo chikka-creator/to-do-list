@@ -46,13 +46,14 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        if (!Auth::attempt($validated)) {
+        $user = User::where('email', $validated['email'])->first();
+
+        if (! $user || ! Hash::check($validated['password'], $user->password)) {
             return response()->json([
                 'message' => 'The provided credentials are incorrect.',
             ], 401);
         }
 
-        $user  = Auth::user();
         $token = $user->createToken('auth-token')->plainTextToken;
 
         return response()->json([

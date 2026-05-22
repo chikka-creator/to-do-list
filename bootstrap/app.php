@@ -26,11 +26,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (\Throwable $e, Request $request) {
             if (isset($_SERVER['VERCEL']) || isset($_ENV['VERCEL'])) {
                 return response()->json([
-                    'message' => $e->getMessage(),
+                    'message' => 'VERCEL API ERROR: ' . $e->getMessage(),
                     'file' => $e->getFile(),
                     'line' => $e->getLine(),
-                    'trace' => $e->getTraceAsString(),
-                ], 500);
+                ], 400);
             }
         });
     })->create();
